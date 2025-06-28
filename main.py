@@ -8,12 +8,12 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfgen.canvas import Canvas
 
-# 注册静态 TTF 字体（Regular / Bold / Medium）
+# Register static TTF fonts (Regular / Bold / Medium)
 pdfmetrics.registerFont(TTFont("SourceHanSans-Regular", "fonts/SourceHanSansSC-Regular.ttf"))
 pdfmetrics.registerFont(TTFont("SourceHanSans-Bold", "fonts/SourceHanSansSC-Bold.ttf"))
 pdfmetrics.registerFont(TTFont("SourceHanSans-Medium", "fonts/SourceHanSansSC-Medium.ttf"))
 
-# 定义样式
+# Define styles
 styles = getSampleStyleSheet()
 styles.add(ParagraphStyle(name='ChineseNormal', fontName='SourceHanSans-Regular', fontSize=12, leading=18, firstLineIndent=20))
 styles.add(ParagraphStyle(name='ChineseTitle', fontName='SourceHanSans-Bold', fontSize=24, leading=32, alignment=1, spaceAfter=20))
