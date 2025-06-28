@@ -1,4 +1,3 @@
-
 import re
 import chardet
 from reportlab.pdfbase import pdfmetrics
@@ -9,18 +8,19 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfgen.canvas import Canvas
 
+# 注册静态 TTF 字体（Regular / Bold / Medium）
+pdfmetrics.registerFont(TTFont("SourceHanSans-Regular", "fonts/SourceHanSansSC-Regular.ttf"))
+pdfmetrics.registerFont(TTFont("SourceHanSans-Bold", "fonts/SourceHanSansSC-Bold.ttf"))
+pdfmetrics.registerFont(TTFont("SourceHanSans-Medium", "fonts/SourceHanSansSC-Medium.ttf"))
 
-
-# 注册思源黑体
-pdfmetrics.registerFont(TTFont("SourceHanSans", "fonts/SourceHanSansSC-VF.ttf"))
-
+# 定义样式
 styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name='ChineseNormal', fontName='SourceHanSans', fontSize=12, leading=18, firstLineIndent=20))
-styles.add(ParagraphStyle(name='ChineseTitle', fontName='SourceHanSans', fontSize=24, leading=32, alignment=1, spaceAfter=20))
-styles.add(ParagraphStyle(name='ChineseSubtitle', fontName='SourceHanSans', fontSize=14, leading=22, alignment=1, spaceAfter=20))
-styles.add(ParagraphStyle(name='ChineseH1', fontName='SourceHanSans', fontSize=18, leading=26, spaceBefore=18, spaceAfter=12))
-styles.add(ParagraphStyle(name='ChineseH2', fontName='SourceHanSans', fontSize=14, leading=22, spaceBefore=12, spaceAfter=8))
-styles.add(ParagraphStyle(name='ChineseTOC', fontName='SourceHanSans', fontSize=12, leftIndent=0, leading=18))
+styles.add(ParagraphStyle(name='ChineseNormal', fontName='SourceHanSans-Regular', fontSize=12, leading=18, firstLineIndent=20))
+styles.add(ParagraphStyle(name='ChineseTitle', fontName='SourceHanSans-Bold', fontSize=24, leading=32, alignment=1, spaceAfter=20))
+styles.add(ParagraphStyle(name='ChineseSubtitle', fontName='SourceHanSans-Regular', fontSize=14, leading=22, alignment=1, spaceAfter=20))
+styles.add(ParagraphStyle(name='ChineseH1', fontName='SourceHanSans-Bold', fontSize=18, leading=26, spaceBefore=18, spaceAfter=12))
+styles.add(ParagraphStyle(name='ChineseH2', fontName='SourceHanSans-Medium', fontSize=14, leading=22, spaceBefore=12, spaceAfter=8))
+styles.add(ParagraphStyle(name='ChineseTOC', fontName='SourceHanSans-Regular', fontSize=12, leftIndent=0, leading=18))
 
 def detect_encoding(path):
     with open(path, 'rb') as f:
@@ -52,7 +52,7 @@ class BookmarkCanvas(Canvas):
 
 def on_page(canvas: Canvas, doc):
     canvas.saveState()
-    canvas.setFont("SourceHanSans", 10)
+    canvas.setFont("SourceHanSans-Regular", 10)
     canvas.drawCentredString(A4[0] / 2.0, 1.5 * cm, str(canvas.getPageNumber()))
     canvas.restoreState()
 
