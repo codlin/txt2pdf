@@ -8,19 +8,65 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import cm
 from reportlab.pdfgen.canvas import Canvas
 
-# Register static TTF fonts (Regular / Bold / Medium)
+# 注册静态 TTF 字体（Regular / Bold / Medium）
 pdfmetrics.registerFont(TTFont("SourceHanSans-Regular", "fonts/SourceHanSansSC-Regular.ttf"))
 pdfmetrics.registerFont(TTFont("SourceHanSans-Bold", "fonts/SourceHanSansSC-Bold.ttf"))
 pdfmetrics.registerFont(TTFont("SourceHanSans-Medium", "fonts/SourceHanSansSC-Medium.ttf"))
 
-# Define styles
+# 定义样式
 styles = getSampleStyleSheet()
-styles.add(ParagraphStyle(name='ChineseNormal', fontName='SourceHanSans-Regular', fontSize=12, leading=18, firstLineIndent=20))
-styles.add(ParagraphStyle(name='ChineseTitle', fontName='SourceHanSans-Bold', fontSize=24, leading=32, alignment=1, spaceAfter=20))
-styles.add(ParagraphStyle(name='ChineseSubtitle', fontName='SourceHanSans-Regular', fontSize=14, leading=22, alignment=1, spaceAfter=20))
-styles.add(ParagraphStyle(name='ChineseH1', fontName='SourceHanSans-Bold', fontSize=18, leading=26, spaceBefore=18, spaceAfter=12))
-styles.add(ParagraphStyle(name='ChineseH2', fontName='SourceHanSans-Medium', fontSize=14, leading=22, spaceBefore=12, spaceAfter=8))
-styles.add(ParagraphStyle(name='ChineseTOC', fontName='SourceHanSans-Regular', fontSize=12, leftIndent=0, leading=18))
+
+styles.add(ParagraphStyle(
+    name='ChineseNormal',
+    fontName='SourceHanSans-Regular',
+    fontSize=14,              # 四号字体
+    leading=21,               # 行距约为1.5倍字号
+    firstLineIndent=24        # 首行缩进（约0.85 cm）
+))
+
+styles.add(ParagraphStyle(
+    name='ChineseTitle',
+    fontName='SourceHanSans-Bold',
+    fontSize=26,              # 稍大标题
+    leading=34,
+    alignment=1,              # 居中
+    spaceAfter=20
+))
+
+styles.add(ParagraphStyle(
+    name='ChineseSubtitle',
+    fontName='SourceHanSans-Regular',
+    fontSize=16,
+    leading=24,
+    alignment=1,
+    spaceAfter=20
+))
+
+styles.add(ParagraphStyle(
+    name='ChineseH1',
+    fontName='SourceHanSans-Bold',
+    fontSize=20,
+    leading=28,
+    spaceBefore=18,
+    spaceAfter=12
+))
+
+styles.add(ParagraphStyle(
+    name='ChineseH2',
+    fontName='SourceHanSans-Medium',
+    fontSize=16,
+    leading=24,
+    spaceBefore=12,
+    spaceAfter=8
+))
+
+styles.add(ParagraphStyle(
+    name='ChineseTOC',
+    fontName='SourceHanSans-Regular',
+    fontSize=14,
+    leftIndent=0,
+    leading=21
+))
 
 def detect_encoding(path):
     with open(path, 'rb') as f:
@@ -30,10 +76,10 @@ def detect_encoding(path):
     return raw.decode(encoding or 'utf-8', errors='ignore')
 
 def is_volume_title(line):
-    return re.match(r'^第[一二三四五六七八九十百千0-9]+卷', line.strip())
+    return re.match(r'^第[一二三四五六七八九十百千0-9]+卷', line.strip()) or re.match(r'^(楔子|序章|番外|终章|后记|感言|凡人外传)', line.strip())
 
 def is_chapter_title(line):
-    return re.match(r'^第[一二三四五六七八九十百千0-9]+章', line.strip()) or re.match(r'^(楔子|序章|番外|终章|后记)', line.strip())
+    return re.match(r'^第[一二两三四五六七八九十百千0-9]+章', line.strip())
 
 class BookmarkCanvas(Canvas):
     def __init__(self, *args, **kwargs):
