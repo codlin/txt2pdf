@@ -107,17 +107,15 @@ def generate_pdf(input_file, output_file):
     lines = text.splitlines()
 
     story = []
-    title, author, intro_lines = "", "", []
+    title, author, intro_lines = "凡人修仙传", "忘语", []
     content_start = 0
     bookmarks = []
     toc_entries = []
 
     for i, line in enumerate(lines):
         if line.strip().startswith("内容简介："):
-            title = lines[0].strip()
-            author = lines[1].strip()
-            intro_lines = [l.strip() for l in lines[i+1:i+10] if l.strip()]
-            content_start = i + 10
+            intro_lines = [l.strip() for l in lines[i+1:i+6] if l.strip()]
+            content_start = i + 6
             break
 
     if title:
@@ -132,6 +130,8 @@ def generate_pdf(input_file, output_file):
         for para in intro_lines:
             story.append(Paragraph(para, styles['ChineseNormal']))
         story.append(PageBreak())
+    
+    # print(f"📘 内容开始: {lines[content_start]}")
 
     story.append(Paragraph("目录", styles['ChineseH1']))
     toc_placeholder_index = len(story)
@@ -139,6 +139,8 @@ def generate_pdf(input_file, output_file):
 
     for line in lines[content_start:]:
         line = line.strip()
+        # print(f"📘 内容: {line}")
+        
         if not line:
             continue
         elif is_volume_title(line):
